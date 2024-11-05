@@ -1,0 +1,9 @@
+{
+    "file": "lorem.txt",
+    "lang": "uk",
+    "output": "screen",
+    "chars": 500,
+    "words": 100,
+    "sentences": 10,
+    "original-lang": "en"
+}
