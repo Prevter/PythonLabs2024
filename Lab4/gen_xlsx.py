@@ -16,6 +16,15 @@ def get_age(birthdate: str) -> int:
     return age
 
 
+def compact_user(user: dict) -> dict:
+    return {
+        'Прізвище': user['Прізвище'],
+        'Ім\'я': user['Ім\'я'],
+        'По-батькові': user['По-батькові'],
+        'Дата народження': user['Дата народження'],
+        'Вік': get_age(user['Дата народження']),
+    }
+
 def main():
     if not os.path.exists('users.csv'):
         print('File users.csv not found')
@@ -25,6 +34,7 @@ def main():
         with open('users.csv', 'r', newline='', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
             users = list(reader)
+            users = [compact_user(user) for user in users]
     except Exception as e:
         print(f'Error reading file: {e}')
         return
@@ -39,16 +49,16 @@ def main():
 
     try:
         for user in users:
-            age = get_age(user['Дата народження'])
+            age = user['Вік']
+            age_groups['all'].append({'#': len(age_groups['all']) + 1, **user})
             if age < 18:
-                age_groups['younger_18'].append(user)
+                age_groups['younger_18'].append({'#': len(age_groups['younger_18']) + 1, **user})
             elif age < 45:
-                age_groups['18-45'].append(user)
+                age_groups['18-45'].append({'#': len(age_groups['18-45']) + 1, **user})
             elif age < 70:
-                age_groups['45-70'].append(user)
+                age_groups['45-70'].append({'#': len(age_groups['45-70']) + 1, **user})
             else:
-                age_groups['older_70'].append(user)
-            age_groups['all'].append(user)
+                age_groups['older_70'].append({'#': len(age_groups['older_70']) + 1, **user})
     except Exception as e:
         print(f'Error grouping users: {e}')
         return
